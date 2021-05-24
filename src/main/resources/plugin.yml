@@ -1,0 +1,28 @@
+main: tech.tyman.chatbridge.ChatBridge
+name: ChatBridge
+version: 0.0.1
+description: A chat bridge between a minecraft server and a discord server.
+commands:
+  chatbridge:
+    description: The main command for ChatBridge
+    aliases: [discord]
+permissions:
+  chatbridge.messages.viewsent:
+    description: Permission allowing the player to view messages sent from discord
+    default: true
+  chatbridge.commands:
+    description: The main permission for all ChatBridge commands
+    default: true
+    children:
+      chatbridge.commands.player: true
+#      chatbridge.commands.admin: true
+  chatbridge.commands.player:
+    description: The main permission for all non-admin related Chatbridge commands
+    default: true
+    children:
+      chatbridge.commands.player.help: true
+      chatbridge.commands.player.invite: true
+#  chatbridge.commands.admin:
+#    description: The main permission for all admin related Chatbridge commands
+#    default: op
+#    children:
