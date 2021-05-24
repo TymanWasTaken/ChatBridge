@@ -1,7 +1,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     kotlin("jvm") version "1.4.31"
+    id("com.github.johnrengelman.shadow") version "5.1.0"
 }
 
 group = "tech.tyman.chatbridge"
@@ -15,12 +17,25 @@ repositories {
 
 dependencies {
     compileOnly("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
+    implementation(kotlin("stdlib"))
     implementation("co.aikar:acf-paper:0.5.0-SNAPSHOT")
     implementation("dev.kord:kord-core:0.7.0-RC3")
-    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.2.0")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.2.0")
 }
 
-tasks.withType<KotlinCompile>() {
+tasks.withType<ShadowJar> {
+    archiveClassifier.set("")
+    project.configurations.implementation.get().isCanBeResolved = true
+    configurations = listOf(project.configurations.implementation.get())
+}
+
+tasks {
+    build {
+        dependsOn(shadowJar)
+    }
+}
+
+tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
     kotlinOptions.javaParameters = true
 }

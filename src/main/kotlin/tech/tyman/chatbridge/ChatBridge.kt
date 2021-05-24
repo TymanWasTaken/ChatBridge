@@ -10,6 +10,7 @@ class ChatBridge : JavaPlugin() {
     private lateinit var botHandler: BotHandler
     override fun onEnable() {
         configManager = ConfigManager(this)
+        configManager.initializeConfig()
         botHandler = BotHandler(this)
         thread {
             runBlocking {
@@ -19,6 +20,9 @@ class ChatBridge : JavaPlugin() {
         this.logger.log(Level.INFO, "ChatBridge Loaded")
     }
     override fun onDisable() {
+        runBlocking {
+            botHandler.client.shutdown()
+        }
         saveConfig()
         this.logger.log(Level.INFO, "ChatBridge Unloaded")
     }
