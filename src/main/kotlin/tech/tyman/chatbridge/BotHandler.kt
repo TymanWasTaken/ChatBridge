@@ -27,7 +27,7 @@ class BotHandler(val plugin: ChatBridge) {
     lateinit var webhook: Webhook
     suspend fun startBot() {
         try {
-            client = Kord(plugin.configManager.Token) {
+            client = Kord(plugin.configManager.token) {
                 intents = Intents {
                     +Intent.GuildMessages
                     +Intent.DirectMessages
@@ -55,7 +55,7 @@ class BotHandler(val plugin: ChatBridge) {
             )
         }
         client.on<ReadyEvent> {
-            var channel = client.getChannel(Snowflake(plugin.configManager.Channel))
+            var channel = client.getChannel(Snowflake(plugin.configManager.channel))
             if (channel == null) {
                 plugin.logger.log(Level.SEVERE, "Could not fetch channel, stopping bot...")
                 client.shutdown()
@@ -88,7 +88,7 @@ class BotHandler(val plugin: ChatBridge) {
                 plugin.logger.log(Level.INFO, "Got sync message, ignoring")
                 return
             }
-            val channel = client.getChannel(Snowflake(plugin.configManager.Channel))
+            val channel = client.getChannel(Snowflake(plugin.configManager.channel))
             if (channel == null) {
                 plugin.logger.log(
                     Level.SEVERE,
