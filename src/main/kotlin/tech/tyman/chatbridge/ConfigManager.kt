@@ -8,6 +8,7 @@ class ConfigManager(private val plugin: ChatBridge) {
         plugin.config.options().copyDefaults(true)
         plugin.saveConfig()
     }
+    fun save() = plugin.saveConfig()
     var token: String
         get() = plugin.config.getString("Token")!!
         set(value) = plugin.config.set("Token", value)

@@ -1,29 +1,24 @@
 package tech.tyman.chatbridge
 
-import kotlinx.coroutines.runBlocking
-import org.bukkit.plugin.java.JavaPlugin
+import co.aikar.commands.PaperCommandManager
+import com.github.shynixn.mccoroutine.SuspendingJavaPlugin
 import java.util.logging.Level
-import kotlin.concurrent.thread
 
-class ChatBridge : JavaPlugin() {
+class ChatBridge : SuspendingJavaPlugin() {
     lateinit var configManager: ConfigManager
     private lateinit var botHandler: BotHandler
-    override fun onEnable() {
+    private lateinit var commandManager: PaperCommandManager
+    override suspend fun onEnableAsync() {
+        commandManager = PaperCommandManager(this)
         configManager = ConfigManager(this)
         configManager.initializeConfig()
         botHandler = BotHandler(this)
-        thread {
-            runBlocking {
-                botHandler.startBot()
-            }
-        }
+        botHandler.startBot()
         this.logger.log(Level.INFO, "ChatBridge Loaded")
     }
-    override fun onDisable() {
-        runBlocking {
-            botHandler.client.shutdown()
-        }
-        saveConfig()
+    override suspend fun onDisableAsync() {
+        botHandler.client?.shutdown()
+        configManager.save()
         this.logger.log(Level.INFO, "ChatBridge Unloaded")
     }
 }
