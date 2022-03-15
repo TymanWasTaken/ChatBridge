@@ -20,6 +20,7 @@ import io.papermc.paper.event.player.AsyncChatEvent
 import kotlinx.coroutines.flow.firstOrNull
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
+import net.kyori.adventure.text.format.TextColor
 import java.util.logging.Level
 
 class BotHandler(val plugin: ChatBridge) {
@@ -84,6 +85,14 @@ class BotHandler(val plugin: ChatBridge) {
             }
         }
     }
+
+    suspend fun getChannel(): TextChannel? {
+        val client = client ?: return null
+        val channel = client.getChannel(Snowflake(plugin.configManager.channel))
+        if (channel == null || !listOf(ChannelType.GuildText).contains(channel.type)) return null
+        return channel as TextChannel
+    }
+
     @Suppress("unused")
     inner class ServerEventHandler : Listener {
         @EventHandler

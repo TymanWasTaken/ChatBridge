@@ -13,6 +13,10 @@ repositories {
     mavenCentral()
     maven("https://repo.aikar.co/content/groups/aikar/")
     maven("https://papermc.io/repo/repository/maven-public/")
+    maven {
+        url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap")
+        name = "ktor-eap"
+    }
 }
 
 val include: Configuration by configurations.creating
